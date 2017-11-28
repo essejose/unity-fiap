@@ -37,18 +37,9 @@ public class Personagem : MonoBehaviour {
 			float move_y = Input.GetAxisRaw ("Vertical") * velocidade * Time.deltaTime;
 
 		transform.Translate(move_x, move_y,0.0f);
-
-
-
-		transform.Translate(move_x, 0.0f,0.0f);
-
-			
-	 
+		    
 		mySpriteRender.flipX = !(move_x >= 0);
-
-
-
-
+		 
 		  
 		if (Input.GetButtonDown ("Jump")){
 
