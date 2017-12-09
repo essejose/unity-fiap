@@ -7,7 +7,10 @@ public class FlappyBirdScript : MonoBehaviour {
 
 	public static bool inGame;
 
-	GameObject lb;
+	bool endGame;
+
+	public GameObject lb;
+	public GameObject panel;
 
 	public  float inpulso ;
 
@@ -20,29 +23,46 @@ public class FlappyBirdScript : MonoBehaviour {
 
 		rb = GetComponent<Rigidbody2D> ();
 
-		lb = GameObject.Find ("label");
 		 
+		lb.SetActive (true);
+
 		rb.gravityScale = 0.0f;
 		inpulso = 5.0f;
+
+		endGame = false;
  		
 	}
 	
 	// Update is called once per frame
 	void Update () {
 
-		if (!inGame && Input.GetButtonDown("Fire1")) {
+		if (inGame) {
+			lb.SetActive (false);
+		}
+
+		if (!inGame && Input.GetButtonDown("Fire1") && !endGame) {
 			
 			rb.gravityScale = 1.0f;
 			inGame = true;
 		 
 
 		}else if (inGame && Input.GetButtonDown("Fire1")){
-
+			
 			rb.velocity = new Vector2(0.0f, inpulso);
-			rb.AddForce (new Vector2(1f, 0.0f));
+			rb.AddForce (new Vector2(2f, 0.0f));
+
 
 		}
-		 
+
+
+
+		if (Input.GetButtonDown("Fire1") && endGame){
+
+			SceneManager.LoadScene ("start");
+
+		}
+
+
 
 
 	}
@@ -50,7 +70,8 @@ public class FlappyBirdScript : MonoBehaviour {
 	void OnCollisionEnter2D(Collision2D c) {
 
 		inGame = false;
-		SceneManager.LoadScene ("start");
+		endGame = true;
+		panel.SetActive (true);
 
 	}
 
