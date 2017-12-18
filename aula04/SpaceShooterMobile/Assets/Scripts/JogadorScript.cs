@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class JogadorScript : MonoBehaviour {
 
 
@@ -12,8 +12,9 @@ public class JogadorScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
-	}
+
+        PontuacaoScript.lives = vida;
+    }
 	 
 	void Mover(){
 		
@@ -34,23 +35,38 @@ public class JogadorScript : MonoBehaviour {
 	void OnCollisionEnter2D(Collision2D c){
 		if (c.gameObject.tag == "Inimigo") {
 			 
+
 			vida--;
 			Instantiate (explosao, transform.position,transform.rotation); 
 			Destroy (c.gameObject);
+          
+            PontuacaoScript.lives = vida;
 
-			if (vida <= 0) {
+            transform.position = new Vector2(0, 0);
 
-
+            if (vida <= 0) {
+                 
 				Destroy (gameObject);
-			}
+                SceneManager.LoadScene("intro");
+                StartScript.inGame = false;
+            }
 		 
 		}
 	
 	}
 
-	// Update is called once per frame
-	void Update () {
-		Mover ();
+  //  IEnumerator Reponave()
+    //{
+       
+      //  yield return new WaitForSeconds (2f); 
+        //   StartCoroutine(Start());
+
+    //} 
+
+    // Update is called once per frame
+    void Update () {
+      
+        Mover ();
 		//print (vida);
 	}
 

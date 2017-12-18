@@ -29,8 +29,12 @@ public class ProjetilScript : MonoBehaviour {
 
 			Instantiate (explosao, transform.position,transform.rotation);
 
-			Destroy (c.gameObject);
+           
+
+            Destroy (c.gameObject);
 			Destroy (gameObject);
+            PontuacaoScript.score++;
+            print(PontuacaoScript.score);
 			 
 		}
 
