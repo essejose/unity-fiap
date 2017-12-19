@@ -11,7 +11,7 @@ public class StartScript : MonoBehaviour {
 
             if (!inGame && Input.GetButtonDown("Fire1") && !endGame)
             {
-                   
+                    inGame = true;
                      SceneManager.LoadScene("game");
              }
         }
