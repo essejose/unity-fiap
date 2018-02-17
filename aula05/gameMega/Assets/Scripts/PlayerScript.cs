@@ -9,8 +9,11 @@ public class PlayerScript : MonoBehaviour {
 	public float velocidade;
 	public float impulso;
 	public Transform chaoVerificador;
+	public Transform chaoVerificadorEsqueda;
+	public Transform chaoVerificadorDireita;
 
 	bool estanoChao;
+	bool intro = true;
 
 	Rigidbody2D rb;
 
@@ -22,7 +25,7 @@ public class PlayerScript : MonoBehaviour {
 		animator = GetComponent<Animator>();
 		spriteRenderer = GetComponent<SpriteRenderer>();
 		rb = GetComponent<Rigidbody2D>();
-
+		StartCoroutine (start ());
 	}
 	
 	// Update is called once per frame
@@ -34,32 +37,41 @@ public class PlayerScript : MonoBehaviour {
 
 	}
 
+	IEnumerator start(){
+
+
+		animator.SetBool ("inGame", false);
+		 
+		yield return new WaitForSeconds (.5f);
+		animator.SetBool ("inGame", true);
+		intro = false;
+
+
+	}
+
 	void mover(){
-		
-		float mover_x = Input.GetAxisRaw ("Horizontal") * velocidade * Time.deltaTime;
-		transform.Translate (mover_x, 0.0f, 0.0f);
 
-		if (mover_x > 0.0f)
-		{
-			spriteRenderer.flipX = false;
+		if (!intro) {
+			float mover_x = Input.GetAxisRaw ("Horizontal") * velocidade * Time.deltaTime;
+			transform.Translate (mover_x, 0.0f, 0.0f);
 
+			if (mover_x > 0.0f) {
+				spriteRenderer.flipX = false;
+
+			} else if (mover_x < 0.0f) {
+				spriteRenderer.flipX = true;
+
+			}
+			animator.SetFloat ("run", Mathf.Abs (Input.GetAxisRaw ("Horizontal")));
+
+			estanoChao = Physics2D.Linecast (transform.position, chaoVerificadorEsqueda.position, 1 << LayerMask.NameToLayer ("Piso")) || Physics2D.Linecast (transform.position, chaoVerificadorDireita.position, 1 << LayerMask.NameToLayer ("Piso"));
+	 
+			animator.SetBool ("jump", !estanoChao);
+			if (estanoChao)
+				pulo ();
+
+			fire ();
 		}
-		else if( mover_x < 0.0f)  
-		{
-			spriteRenderer.flipX = true;
-
-		}
-		animator.SetFloat ("run", Mathf.Abs (Input.GetAxisRaw ("Horizontal")));
-
-		estanoChao = Physics2D.Linecast (transform.position, chaoVerificador.position, 1 << LayerMask.NameToLayer("Piso"));
-		print (estanoChao);
-
-		animator.SetBool ("jump", !estanoChao);
-		if(estanoChao)
-			pulo ();
-
-		fire ();
-
 	}
 
 	void pulo(){
