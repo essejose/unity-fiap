@@ -6,14 +6,17 @@ public class PlayerScript : MonoBehaviour {
 
 	Animator animator;
 
+	public float life;
 	public float velocidade;
 	public float impulso;
+
 	public Transform chaoVerificador;
 	public Transform chaoVerificadorEsqueda;
 	public Transform chaoVerificadorDireita;
 
 	bool estanoChao;
 	bool intro = true;
+	float intervalo = 0.1f;
 
 	Rigidbody2D rb;
 
@@ -38,8 +41,6 @@ public class PlayerScript : MonoBehaviour {
 	}
 
 	IEnumerator start(){
-
-
 		animator.SetBool ("inGame", false);
 		 
 		yield return new WaitForSeconds (.5f);
@@ -86,11 +87,51 @@ public class PlayerScript : MonoBehaviour {
 
 	void fire(){
 		
-		if (Input.GetButton ("Fire1")) {
+		if (Input.GetButton("Fire1")) {
 
 			animator.SetBool ("isFire", true);
 		} else {
 			animator.SetBool ("isFire", false);
 		}
 	}
+
+	void OnTriggerEnter2D(Collider2D c) {
+		 
+
+		if (c.gameObject.tag == "subInimigo") {
+			life--;
+
+			StartCoroutine (blink());
+		 
+			if (life <= 0) {
+				Destroy (gameObject);
+			}
+
+		}
+
+
+	}
+
+
+	IEnumerator blink(){
+
+	 
+		GetComponent<SpriteRenderer> ().enabled = false;
+		yield return new WaitForSeconds (intervalo);
+		GetComponent<SpriteRenderer> ().enabled = true;
+		yield return new WaitForSeconds (intervalo);
+		GetComponent<SpriteRenderer> ().enabled = false;
+		yield return new WaitForSeconds (intervalo);
+		GetComponent<SpriteRenderer> ().enabled = true;
+		yield return new WaitForSeconds (intervalo); 
+ 
+	 
+	}
+
+
+ 
+
+
+
+
 }

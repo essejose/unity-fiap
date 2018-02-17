@@ -10,7 +10,7 @@ public class ArmaScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		StartCoroutine (fire ());
+	//	StartCoroutine (fire ());
 	}
 	
 	// Update is called once per frame
@@ -18,6 +18,10 @@ public class ArmaScript : MonoBehaviour {
 		 
 	
 
+		if (Input.GetButtonUp("Fire1")) {
+
+			Instantiate (projetil, transform.position, transform.rotation);
+		}
 
 		if (Input.GetAxisRaw ("Horizontal") > 0.0f) {
 
@@ -34,7 +38,7 @@ public class ArmaScript : MonoBehaviour {
 
 
 
-		if (Input.GetButton("Fire1")) {
+		if (Input.GetButtonUp("Fire1")) {
 
 			Instantiate (projetil, transform.position, transform.rotation);
 		}

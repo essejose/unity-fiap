@@ -25,11 +25,20 @@ public class ProjetilScript : MonoBehaviour {
 		transform.Translate (Vector2.right * velocidade * Time.deltaTime);
 	}
 
+ 
+
 	void OnCollisionEnter2D(Collision2D c){
 
-		if (c.gameObject.tag == "Inimigo") {
+		print (c);
+	
 
-			Instantiate (explosao, transform.position,transform.rotation);
+	}
+
+	void OnTriggerEnter2D(Collider2D c) {
+		print (c);
+		if (c.gameObject.tag == "subInimigo") {
+
+		//	Instantiate (explosao, transform.position,transform.rotation);
 
 
 
@@ -40,5 +49,7 @@ public class ProjetilScript : MonoBehaviour {
 		}
 
 	}
+
+
 
 }
