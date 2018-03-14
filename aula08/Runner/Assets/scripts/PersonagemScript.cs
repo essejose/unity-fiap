@@ -10,9 +10,9 @@ public class PersonagemScript : MonoBehaviour {
 
 	public float velocidade;
 	public GameObject personagem;
+    Rigidbody playerRigidbody;
 
-
-	void OnCollisionEnter(Collision c){
+    void OnCollisionEnter(Collision c){
 		print (c);
 		if (c.gameObject.tag == "item") {
 			Destroy (c.gameObject);
@@ -27,8 +27,8 @@ public class PersonagemScript : MonoBehaviour {
 		ani = personagem.GetComponent<Animation> ();
 
 		ani.CrossFade ("idle");
-
-	}
+        playerRigidbody = GetComponent<Rigidbody>();
+    }
 
  
 	// Update is called once per frame
@@ -39,18 +39,38 @@ public class PersonagemScript : MonoBehaviour {
 		if (Input.GetButton ("Fire1")) {
 			RaycastHit hit;
 			Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
+             
+			if (Physics.Raycast (ray, out hit)   ) {
+                print(hit.collider.gameObject.tag);
 
+                novaPosicao = hit.point;
+                print(novaPosicao);
+                transform.position = Vector3.MoveTowards (transform.position,  new Vector3(novaPosicao.x,0,novaPosicao.z), velocidade * Time.deltaTime);
+               
+                ani.CrossFade ("run");
+                // transform.LookAt (hit.point);
+                            
+                /*
+                Vector3 targetPostition = new Vector3(hit.point.x,
+                                                       this.transform.position.y,
+                                                       hit.point.z);
+                this.transform.LookAt(targetPostition);
+                */
 
-			if (Physics.Raycast (ray, out hit) && hit.collider.gameObject.name != "personagem-mover") {
+            }
 
+            // Create a vector from the player to the point on the floor the raycast from the mouse hit.
+            Vector3 playerToMouse = hit.point - transform.position;
 
-				novaPosicao = hit.point;
-				transform.position = Vector3.MoveTowards (transform.position,  new Vector3(novaPosicao.x,0,novaPosicao.z), velocidade * Time.deltaTime);
-				ani.CrossFade ("run"); 
-				transform.LookAt (hit.point);
-			} 
-		
-		} else {
+            // Ensure the vector is entirely along the floor plane.
+            playerToMouse.y = 0f;
+
+            // Create a quaternion (rotation) based on looking down the vector from the player to the mouse.
+            Quaternion newRotation = Quaternion.LookRotation(playerToMouse);
+
+            // Set the player's rotation to this new rotation.
+            playerRigidbody.MoveRotation(newRotation);
+        } else {
 			ani.CrossFade ("idle");
 		}
 	

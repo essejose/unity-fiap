@@ -18,7 +18,7 @@ public class GerarAboboras : MonoBehaviour {
 		posicao.x = Random.Range (limiteEsquerdo, limiteDireito);
 		posicao.y = 20.0f;
 		posicao.z = Random.Range (limiteFrontal, limiteTraseiro);
-		Instantiate (aboboraPrefab, posicao, transform.rotation);
+		Instantiate (aboboraPrefab, posicao, Quaternion.Euler(122f, Random.Range(1,100), 0));
 
 		StartCoroutine (Start ());
 	}
